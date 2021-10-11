@@ -1,11 +1,21 @@
 Package: gtR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Access the UK Research and Innovation (UKRI) Gateway to Research (GtR) API
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Shane Jackson
+Maintainer: Shane Jackson <shane.jackson@gmx.co.uk>
+Description: Simplifies routes to accessing the GtR API by handling some of the repetitive basics of query-writing under the hood. 
+    Lets you access details of projects, organisations and outcomes.
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports:
+    curl,
+    dplyr,
+    glue,
+    httr,
+    janitor,
+    jsonlite,
+    stringr
