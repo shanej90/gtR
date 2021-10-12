@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   gtR: gtR.html
-last_built: 2021-10-12T09:54Z
+last_built: 2021-10-12T10:29Z
 urls:
   reference: https://shanej90.github.io/gtR/reference
   article: https://shanej90.github.io/gtR/articles
