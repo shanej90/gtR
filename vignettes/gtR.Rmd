@@ -49,7 +49,7 @@ You can't see Exeter in here. However, all you're doing is returning all organis
 
 ```{r example_2, echo = T}
 
-data2 <- query_resource_all("organisation", page_num = 3, size = 10)
+query_resource_all("organisation", page_num = 3, size = 10)
 
 ```
 Still no good. Obviously randomly trying different page numbers and result sizes isn't the most efficient approach. What if we try searching specifically for the term "Exeter"?
