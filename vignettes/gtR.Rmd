@@ -1,0 +1,72 @@
+---
+title: "gtR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gtR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Installation
+
+You can install the package from [GitHub](https://github.com/shanej90/gtR) using the following code:
+
+``` {r install, eval = F }
+remotes::install_github("shanej90/gtR")
+```
+
+## How it works
+`gtR` simplifies the process of accessing the UKRI Gateway to Research API.
+
+Currently, it lets you:
+
+* View a list of endpoints (`gtr_endpoints`).
+* Get configuration details for said endpoints (`get_configs()`).
+* Run a query against all records for a particular resource (`query_resource_all()`). THis includes the ability to search for a specific term in named fields to narrow results. You can choose to return just the 'pure' results in a dataframe, or return a list containing additional metadata (eg total number of records in scope of query, which may be useful in determining your input variables).
+
+## Examples
+
+You want to try and identify the University of Exeter's record in the API.
+
+```{r example_1, echo = T}
+
+library(gtR)
+
+data <- query_resource_all("organisation", size = 10)
+
+data
+
+```
+
+You can't see Exeter in here. However, all you're doing is returning all organisations in the API, so this isn't a very intelligent search. Maybe you can try including more results in the query, or try returning a different page?
+
+```{r example_2, echo = T}
+
+data2 <- query_resource_all("organisation", page_num = 3, size = 10)
+
+```
+Still no good. Obviously randomly trying different page numbers and result sizes isn't the most efficient approach. What if we try searching specifically for the term "Exeter"?
+
+```{r example_3, echo = T}
+
+#return configuration for organisation records to look up field codes to search against
+
+org_config <- get_configs("organisation")
+
+org_config$fields
+
+#so we can see we need to search against "org.n" to look up the name.
+#The cofniguration file shows this is searched anyway, so we don't need to reference the code, but will for completeness
+
+query_resource_all("organisation", size = 30, search_term = "Exeter", search_fields = "org.n")
+
+```
+
+Success!

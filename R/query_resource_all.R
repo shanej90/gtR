@@ -25,7 +25,7 @@ query_resource_all <- function(
   if(!resource %in% names(unlist(gtR::gtr_endpoints)) | resource %in% c("base", "configs", "outcomes")) stop("'resource' must be in the list of resources as per `gtr_endpoints`, excluding `base`, `outcomes`, or `configs`")
 
   #make sure size is between 1 and 100
-  if(size < 1 | size > 100 | size != round(size)) stop("'size' must be an integer > 0 and <= 100")
+  if(size < 10 | size > 100 | size != round(size)) stop("'size' must be an integer >= 10 and <= 100")
 
   #df_only is logical
   if(!is.logical(df_only)) stop("'df_only` must be logical (TRUE or FALSE)")

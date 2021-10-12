@@ -27,7 +27,7 @@ get_configs <- function(
    )
 
   # #check whether you got an error and send message if not
-   if(result$status_code >=400) {
+   if(result$status_code >= 400) {
      err_msg = httr::http_status(result)
      stop(err_msg)
    }
