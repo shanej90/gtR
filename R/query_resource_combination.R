@@ -3,7 +3,7 @@
 #' Sends a query to return all records for your chosen resource. Note that the API returns a maximum of 100 results at a time and this you may need to specify a page or search to get the specific results you want.
 #' @param resource The name of the resource you would like to query, as per `gtr_endpoints`.
 #' @param output The name of the secondary resource you would like to query
-#' @param id The id used to link the resources
+#' @param resource_id The id used to link the resources
 #' @param size The number of results you would like to return (max 100).
 #' @param page_num The page number of results you would like to see.
 #' @param search_term Term you want to check against search_fields. Search works on a 'contains' basis.
@@ -15,7 +15,7 @@
 query_resource_combination <- function(
   resource,
   output,
-  id,
+  resource_id,
   size = 20,
   page_num = 1,
   search_term,
@@ -44,7 +44,7 @@ query_resource_combination <- function(
 
     #added in ID break to link resources
     #figure out how to retrieve ID without pasting in complete...
-    .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}/{id}{gtR::gtr_endpoints[[output]]}")
+    .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}/{resource_id}{gtR::gtr_endpoints[[output]]}")
 
   } else {
 
