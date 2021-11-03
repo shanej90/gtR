@@ -1,8 +1,8 @@
-#' Function to streamline searching for resource records without limiting to records associated with another specific resource. Eg, query ALL projects, not just those associated with the University of Exeter.
+#' Function to streamline searching for resource records associated with another specific resource. Eg, query ALL projects for a specified Organisation/person.
 #'
 #' Sends a query to return all records for your chosen resource. Note that the API returns a maximum of 100 results at a time and this you may need to specify a page or search to get the specific results you want.
 #' @param resource The name of the resource you would like to query, as per `gtr_endpoints`.
-#' @param output The name of the secondary resource you would like to query
+#' @param output The name of the resource you would like to return, as per `gtr_endpoints`.
 #' @param resource_id The id used to link the resources
 #' @param size The number of results you would like to return (max 100).
 #' @param page_num The page number of results you would like to see.

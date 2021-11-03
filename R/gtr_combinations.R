@@ -4,12 +4,10 @@
 #' @export
 
 gtr_combinations <- list(
-  "orginisation project",
-  "orginisation publication",
-  "orginisation fund",
-  "orginisation publication",
+  "organisation project",
+  "organisation publication",
+  "organisation fund",
   "person project",
   "person publication",
-  "person fund",
-  "person publication"
+  "person fund"
 )

@@ -1,8 +1,8 @@
-#' Function to streamline searching for resource records without limiting to records associated with another specific resource. Eg, query ALL projects, not just those associated with the University of Exeter.
+#' Function to streamline searching for resource records associated with another specific resource. Eg, query ALL projects for a specified Organisation/person. Limits the query to a defined list of resource combinations.
 #'
 #' Sends a query to return all records for your chosen resource. Note that the API returns a maximum of 100 results at a time and this you may need to specify a page or search to get the specific results you want.
 #' @param resource The name of the resource you would like to query, as per `gtr_endpoints`.
-#' @param output The name of the secondary resource you would like to query
+#' @param output The name of the resource you would like to return, as per `gtr_endpoints`.
 #' @param resource_id The id used to link the resources
 #' @param size The number of results you would like to return (max 100).
 #' @param page_num The page number of results you would like to see.
@@ -25,11 +25,9 @@ query_resource_combination <- function(
 
   #error handling---------------------------------------
 
-  #check resource combination is correct
-  if(!paste(resource, output) %in% names(unlist(gtR::gtr_combinations))) stop("'resource' and 'output' combination must be in the list of options as per 'gtr_combinations'")
-
-  #check resource is correct
-  if(!resource %in% names(unlist(gtR::gtr_endpoints)) | resource %in% c("base", "configs", "outcomes") |!output %in% names(unlist(gtR::gtr_endpoints)) | output %in% c("base", "configs", "outcomes")) stop("'resource' must be in the list of resources as per `gtr_endpoints`, excluding `base`, `outcomes`, or `configs`")
+  #check resource combination is correct#
+  #replace with names(unlist(gtR::gtr_combinations))
+  if(!paste(resource, output) %in% gtr_combinations) stop("'resource' and 'output' combination must be in the list of options as per 'gtr_combinations'")
 
   #make sure size is between 1 and 100
   if(size < 10 | size > 100 | size != round(size)) stop("'size' must be an integer >= 10 and <= 100")
