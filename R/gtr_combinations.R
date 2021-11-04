@@ -9,5 +9,10 @@ gtr_combinations <- list(
   "organisation fund",
   "person project",
   "person publication",
-  "person fund"
+  "person fund",
+  "project outcomes",
+  "project publication",
+  "project collaborations",
+  "project impactSummary",
+  "project furtherfunding"
 )

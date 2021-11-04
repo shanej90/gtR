@@ -25,7 +25,7 @@ query_resource_combination <- function(
 
   #error handling---------------------------------------
 
-  #check resource combination is correct#
+  #check resource combination is correct
   #replace with names(unlist(gtR::gtr_combinations))
   if(!paste(resource, output) %in% gtr_combinations) stop("'resource' and 'output' combination must be in the list of options as per 'gtr_combinations'")
 
@@ -101,9 +101,9 @@ query_resource_combination <- function(
   result_text <- httr::content(result, "text")
 
   #final result
-  if(df_only == F) {
+  if(df_only == T) {
 
-    jsonlite::fromJSON(result_text)[[resource]]
+    jsonlite::fromJSON(result_text)[[output]]
 
   } else {
 
