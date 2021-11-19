@@ -1,9 +1,9 @@
 Package: gtR
 Type: Package
 Title: Access the UK Research and Innovation (UKRI) Gateway to Research (GtR) API
-Version: 0.1.0
+Version: 0.2.0
 Author: Shane Jackson
-Maintainer: Shane Jackson <shane.jackson@gmx.co.uk>
+Maintainer: Shane Jackson <shane.jackson@gmx.co.uk> & Joe Way <joefway@gmail.com>
 Description: Simplifies routes to accessing the GtR API by handling some of the repetitive basics of query-writing under the hood. 
     Lets you access details of projects, organisations and outcomes.
 License: GPL (>= 3)
