@@ -28,8 +28,10 @@ remotes::install_github("shanej90/gtR")
 Currently, it lets you:
 
 * View a list of endpoints (`gtr_endpoints`).
+* View a list of resource combinations used in certain functions (`gtr_combinations`)
 * Get configuration details for said endpoints (`get_configs()`).
-* Run a query against all records for a particular resource (`query_resource_all()`). THis includes the ability to search for a specific term in named fields to narrow results. You can choose to return just the 'pure' results in a dataframe, or return a list containing additional metadata (eg total number of records in scope of query, which may be useful in determining your input variables).
+* Run a query against all records for a particular resource (`query_resource_all()`). This includes the ability to search for a specific term in named fields to narrow results. You can choose to return just the 'pure' results in a dataframe, or return a list containing additional metadata (eg total number of records in scope of query, which may be useful in determining your input variables).
+* Run a query for certain records for a specified resource (eg organisation/person/project) (`query_resource_combination()`). This requires an id for the resource that you would like to query, which can be obtained via `query_resource_all()`.
 
 ## Examples
 
