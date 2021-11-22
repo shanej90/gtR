@@ -45,7 +45,7 @@ data <- query_resource_combination(
   resource = "organisation",
   output = "project",
   "961756BF-E31F-4A13-836F-0A09BA02385C",
-  size = 50
+  size = 10
 )
 
 data
