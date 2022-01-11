@@ -28,12 +28,15 @@ remotes::install_github("shanej90/gtR")
 Currently, it lets you:
 
 * View a list of endpoints (`gtr_endpoints`).
-* View a list of resource combinations used in certain functions (`gtr_combinations`)
+* View a list of resource combinations used in certain functions (`gtr_combinations`).
 * Get configuration details for said endpoints (`get_configs()`).
-* Run a query against all records for a particular resource (`query_resource_all()`). This includes the ability to search for a specific term in named fields to narrow results. You can choose to return just the 'pure' results in a dataframe, or return a list containing additional metadata (eg total number of records in scope of query, which may be useful in determining your input variables).
-* Run a query for certain records for a specified resource (eg organisation/person/project) (`query_resource_combination()`). This requires an id for the resource that you would like to query, which can be obtained via `query_resource_all()`.
+* Query the API using `get_resources()`. This allows to return all results for a given 'resource' (eg, project, organisation), or resources linked to a specific entity (eg, all projects for an organisation). It also let's you specify whether you want to return all pages or specific ones, or filter your results using search terms.
+* There are also legacy functions that 'compartmentalise' the functionality offered by `get_resources()`. These allow you to check all results for a given resource `query_resource_all()` or those that are linked to a specific entity (`query_resource_combination()`). These legacy functions also provide the option to return metadata about your query instead of just the 'actual' results.
+
 
 ## Examples
+
+__NB I won't show some actual data outputs as there are some hideously long ID strings in there__.
 
 You want to try and identify the University of Exeter's record in the API.
 
@@ -41,22 +44,13 @@ You want to try and identify the University of Exeter's record in the API.
 
 library(gtR)
 
-data <- query_resource_all("organisation", size = 10)
-
-data
+data <- get_resources(resource = "organisation", page_nums = 1, size = 10)
 
 ```
 
-You can't see Exeter in here. However, all you're doing is returning all organisations in the API, so this isn't a very intelligent search. Maybe you can try including more results in the query, or try returning a different page?
+You can't see Exeter in here. However, you're only looking at the first page. You could try and return more results per page, or try a different page, but doing this randomly wouldn't be very efficient. What if we try searching specifically for the term "Exeter"?
 
 ```{r example_2, echo = T}
-
-query_resource_all("organisation", page_num = 3, size = 10)
-
-```
-Still no good. Obviously randomly trying different page numbers and result sizes isn't the most efficient approach. What if we try searching specifically for the term "Exeter"?
-
-```{r example_3, echo = T}
 
 #return configuration for organisation records to look up field codes to search against
 
@@ -65,10 +59,10 @@ org_config <- get_configs("organisation")
 org_config$fields
 
 #so we can see we need to search against "org.n" to look up the name.
-#The cofniguration file shows this is searched anyway, so we don't need to reference the code, but will for completeness
+#The configuration file shows this is searched anyway, so we don't need to reference the code, but will for completeness
 
-query_resource_all("organisation", size = 30, search_term = "Exeter", search_fields = "org.n")
+final_result <- get_resources("organisation", size = 30, search_term = "Exeter", search_fields = "org.n")
 
 ```
 
-Success!
+Success (third row)!

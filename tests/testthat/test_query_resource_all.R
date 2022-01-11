@@ -11,10 +11,10 @@ testthat::test_that(
 #test that you get a data frame or list as expected-----------------------------
 
 #that you get a dataframe, assuming no API errors
-testthat::expect_is(gtR::query_resource_all("organisation"), "data.frame")
+testthat::expect_s3_class(gtR::query_resource_all("organisation"), "data.frame")
 
 #that you get a list assuming no API errors
-testthat::expect_is(gtR::query_resource_all("organisation", df_only = F), "list")
+testthat::expect_s3_class(gtR::query_resource_all("organisation", df_only = F), "list")
 
 #tyhat picking a non-logical df_only throws an error-----------------------
 

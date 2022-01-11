@@ -1,5 +1,5 @@
 ---
-title: "gtR_combination"
+title: "Results related to a specific entity"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{gtR_combination}
@@ -14,11 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
+__Note this article relates to a legacy functions. Its capabilities are now covered by `get_resources()`.__
+
 ## Introduction
 
-The `query_resource_all` function enables you to retrieve all records for a particular resource using a search term. If you want to limit the records returned to a specific institution, this requires additional arguments.
+The `query_resource_all()` function enables you to retrieve all records for a particular resource using a search term. If you want to limit the records returned to a specific institution, this requires additional arguments.
 
-`query_resource_combination` uses a list of defined combinations of resources (`gtr_combinations`) as well as an `id` argument to refine the records and only include those that match your resource combination and `id`.
+`query_resource_combination()` uses a list of defined combinations of resources (`gtr_combinations`) as well as an `id` argument to refine the records and only include those that match your resource combination and `id`.
 
 ## Process
 
@@ -36,8 +38,10 @@ You want to return all projects linked to the University of Exeter.
 
 library(gtR)
 
-exeter_id <- query_resource_all(resource = "organisation",
-                                search_term = "Exeter")
+exeter_id <- query_resource_all(
+  resource = "organisation",
+  search_term = "Exeter"
+  )
 
 id <- "961756BF-E31F-4A13-836F-0A09BA02385C"
 
