@@ -1,27 +1,28 @@
 #' Function to streamline searching for resource records either in isolation or records associated with another resource.
 #'
 #' Sends a query to return all records for your chosen resource, with the option to query a combination of resources.
-#' @param resource The name of the resource you would liek to query, as per `gtr_endpoints`.
-#' @param output The name of the resource you would like to return, as per `gtr_endpoints`.
+#' @param resource The name of the resource you would like to query/return, as per `gtr_endpoints`.
+#' @param output The name of the resource you would like to return (linked to a specific resource_id), as per `gtr_endpoints`.
 #' @param resource_id The id used to link the resources
-#' @param page_num The page number of results you would like to see, leaving blank will return all pages bound together.
-#' @param size The number of results you would like to return (max 100).
-#' @param search_term Term you want to check against search_fields. Search works on a 'contains' basis.
-#' @param search_fields Fields you want to check search_term against. Enter as character vector. Note fields must be referred to by their code, and some fields may be searched by default. Use `get_configs()` for details of codes and default search fields.
-#' @param df_only Choose whether you only want a dataframe of the 'core' results (T) or you would like additional metadata returned with the query (F).
+#' @param page_nums The numbers of results you would like to see, leaving blank will return all pages bound together. Enter as numeric vector.
+#' @param size The number of results you would like to return (min 10, max 100).
+#' @param search_term Term you want to check against search_fields. Search works on a 'contains' basis. Note search_term applies to the `resource`, NOT the `output`.
+#' @param search_fields Fields you want to check search_term against. Enter as character vector. Note fields must be referred to by their code, and some fields may be searched by default. Use `get_configs()` for details of codes and default search fields. Note `search_fields` relates to the resource, NOT the output.
 #' @return A dataframe holding the results for your chosen query, or a list holding the dataframe plus corresponding metadata..
 #' @export
 
-query_combination_all <- function(
+get_resources <- function(
   resource,
-  output = NULL,
-  resource_id = NULL,
-  page_num = NULL,
+  output,
+  resource_id,
+  page_nums,
   size = 20,
   search_term,
-  search_fields,
-  df_only = T
+  search_fields
 ) {
+
+  #hack to avoid errors about missing output definition
+  output_hack <- if(missing(output)) {"blah"} else {output}
 
   #error handling---------------------------------------
 
@@ -29,31 +30,33 @@ query_combination_all <- function(
   if(!resource %in% names(unlist(gtR::gtr_endpoints)) | resource %in% c("base", "configs", "outcomes")) stop("'resource' must be in the list of resources as per `gtr_endpoints`, excluding `base`, `outcomes`, or `configs`")
 
   #check resource combination is correct
-  if(!is.null(output) & !is.null(resource_id) & !paste(resource, output) %in% names(unlist(gtR::gtr_combinations))) stop("'resource' and 'output' combination must be in the list of options as per 'gtr_combinations'")
+  if(!missing(output) & !missing(resource_id) & !paste(resource, output_hack) %in% unlist(gtR::gtr_combinations)) stop("'resource' and 'output' combination must be in the list of options as per 'gtr_combinations'")
 
   #check resource ID has been provided if returning a combination of resources
-  if(!is.null(output) & is.null(resource_id)) stop("'resource_id' must be provided to return a combination of resources as per 'gtr_combinations")
+  if(!missing(output) & missing(resource_id)) stop("'resource_id' must be provided to return a combination of resources as per 'gtr_combinations")
 
   #make sure size is between 1 and 100
   if(size < 10 | size > 100 | size != round(size)) stop("'size' must be an integer >= 10 and <= 100")
 
-  #df_only is logical
-  if(!is.logical(df_only)) stop("'df_only` must be logical (TRUE or FALSE)")
-
   #url---------------------------------------
 
   #check against whether the resource is an outcome type, which necessitates a different URL format
-  if(!is.null(output) & !is.null(resource_id) & resource %in% names(gtR::gtr_endpoints[1:7])) {
+  if(
+    !missing(output) &
+    !missing(resource_id) &
+    resource %in% names(gtR::gtr_endpoints)[1:7] &
+    output_hack %in% names(gtR::gtr_endpoints)[1:7]
+    ) {
 
     #added in ID break to link resources
     #figure out how to retrieve ID without pasting in complete...
     .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}/{resource_id}{gtR::gtr_endpoints[[output]]}")
 
-  } else if (!is.null(output) & !is.null(resource_id)) {
+  } else if (!missing(output) & !missing(resource_id)) {
 
-    .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[['outcomes']]}/{resource_id}{gtR::gtr_endpoints[[resource]]}")
+    .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}/{resource_id}{gtR::gtr_endpoints[['outcomes']]}{gtR::gtr_endpoints[[output]]}")
 
-  } else if (is.null(output) & is.null(resource_id) & resource %in% names(gtR::gtr_endpoints[1:7])) {
+  } else if (missing(output) & missing(resource_id) & resource %in% names(gtR::gtr_endpoints[1:7])) {
 
     .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}")
 
@@ -65,7 +68,7 @@ query_combination_all <- function(
 
   #query-------------------------------------------------------
 
-  #query settings
+  #query settings - you're leaving page number as 1 here as you're only doing this to ascertain total number of pages
   if(missing(search_fields) & missing(search_term)) {
 
     query_settings <- list(
@@ -97,7 +100,7 @@ query_combination_all <- function(
 
   #get result
   prelim_result <- httr::GET(
-    url = url,
+    url = .url,
     query = query_settings,
     timeout = httr::timeout(15)
   )
@@ -108,7 +111,7 @@ query_combination_all <- function(
     stop(err_msg)
   }
 
-  #turn your results into a df-------------------------------
+  #run prelimary resi;ts tp get page numbers-------------------------------
 
   #text format
   result_text <- httr::content(prelim_result, "text")
@@ -117,24 +120,26 @@ query_combination_all <- function(
   return_list <- jsonlite::fromJSON(result_text)
 
   #extract total page numbers
-  if(is.null(page_num)) { #if you want to return all pages
+  if(missing(page_nums)) { #if you want to return all pages
 
     page_numbers <- (1:return_list$totalPages)
 
-  } else { #if you want to specift which pages to return
+  } else {
 
-    page_numbers <- page_num
+    page_numbers <- page_nums
 
   }
 
 
   #loop return for all page numbers--------------------------
-  loop_results <- function(.page = page_numbers,
-                           .size = size,
-                           .search_term = search_term,
-                           .search_fields = search_fields,
-                           df_only = T) {
+  loop_results <- function(
+    .page = page_numbers,
+    .size = size,
+    .search_term = search_term,
+    .search_fields = search_fields
+    ) {
 
+    #sleep for 5 seconds to avoid potential throttling
     Sys.sleep(5)
 
     #set up search fields to run for each page
@@ -182,31 +187,28 @@ query_combination_all <- function(
 
     #turn your results into a df-------------------------------
 
-    #text format
+    #get json result
     loop_result_text <- httr::content(prelim_result, "text")
 
-    #final result
-    if(df_only == T) {
+    #convert to dataframe
+    if(output_hack == "blah") {
 
-      jsonlite::fromJSON(result_text)[[resource]]
+      jsonlite::fromJSON(loop_result_text)[[resource]]
 
     } else {
 
-      jsonlite::fromJSON(result_text)
+      jsonlite::fromJSON(loop_result_text)[[output]]
 
     }
 
   }
 
   #apply the function over all pages
-  all_results <- for (p in page_numbers) {
+  all_results <- lapply(page_numbers, loop_results) |>
+    #bind together all pages
+    dplyr::bind_rows()
 
-    lapply(page_numbers,
-           loop_results) |>
-      #bind together all pages
-      dplyr::bind_rows()
-  }
-
+  #final result
   return(all_results)
 
 }

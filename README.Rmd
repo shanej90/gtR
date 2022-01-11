@@ -32,18 +32,18 @@ remotes::install_github("shanej90/gtR")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to solve a common problem (results aren't shown due to long character strings in data):
 
 ```{r example}
 library(gtR)
 
 # get list of projects
-gtR::query_resource_all(
+data <- get_resources(
   resource = "project",
   size = 10,
-  page_num = 1,
-  df_only = T
+  page_num = 1
 )
+
 
 ```
 

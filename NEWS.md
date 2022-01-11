@@ -1,6 +1,6 @@
-#gtR 0.3.0
+# gtR 0.3.0
 
-* Function that encompasses and replaces all previous query functions (`query_combination_all`).
+* Function that encompasses and replaces all previous query functions (`get_resources()`).
 
 # gtR 0.2.0
 

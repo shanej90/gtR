@@ -46,7 +46,7 @@ query_resource_combination <- function(
 
   } else {
 
-    .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[['outcomes']]}/{resource_id}{gtR::gtr_endpoints[[resource]]}")
+    .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}/{resource_id}{gtR::gtr_endpoints[['outcomes']]}{gtR::gtr_endpoints[[output]]}")
 
   }
 

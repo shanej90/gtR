@@ -1,0 +1,90 @@
+---
+title: "Complex queries"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = F}
+library(gtR)
+```
+
+The [getting started page](gtR.html) covers a relatively simple query where we're trying to just get a single list of results. More complex queries may require a bit more thought.
+
+__NB I won't show some actual data outputs as there are some hideously long ID strings in there__.
+
+## Combinations
+
+What if we wanted to find projects linked to a specific institution? Let's (completely randomly) say we'd like to take a look at the University of Exeter. To start with, we need to know the ID for Exeter to specify which institution we're interested in when we send the request. First we need to know how we can potentially narrow down results to make searching easier.
+
+```{r example-1, eval = T}
+
+configuration <- get_configs(resource = "organisation") #because we want details about an organisation
+
+#now we want to see field details for that resource:
+configuration$fields
+
+```
+
+Great - we can see from the above that the `org.n` field can be searched and that this corresponds to the organisation name. We can also see `org.n` is searched by default so we don't need to specify it using the `s_fields` argument.
+
+```{r example-2, eval = T}
+
+data <- get_resources(
+  resource = "organisation", #because we're looking for an organisation
+  search_term = "Exeter" # to try and narrow down the field of results without being too specific
+  #no more arguments as we don't want to narrow down the results any further
+)
+
+```
+
+Luckily, here, the University is in the first few results. But it might not have been and we got >1,200 rows of data. This could've been narrowed down by exploring fields, eg, perhaps using `dplyr::filter()` to search for 'University' in the `name` field. But the important thing is the `id` column gives us what we're after.
+
+To find projects we need to specify an `output` as well as a resource (if you're only interested in a single resource/type of entity, you don't need to specify `output` or `resource_id` arguments).
+
+```{r example-3, eval = T}
+
+#there are a LOT of projects related to Exeter so this query will take a while to
+
+data <- get_resources(
+  resource = "organisation", #because the University of Exeter is an organisation
+  output = "project", #because we want to find projects associated with UoE
+  resource_id = "961756BF-E31F-4A13-836F-0A09BA02385C", #we found this ID in the 'getting started' example,
+  page_nums = 1, # only specifying one page number as to keep number of results small
+  size = 10 #as above
+  #we won't worry about other arguments as we're happy to leave them blank on this occasion
+)
+
+```
+
+And you have your results!
+
+## Using results downstream
+
+There are limitations to the above process. For example, you may have your list of projects, but Exeter is involved in a lot. If you're only interested in a specific thing, this might be a lot of unnecessary data.
+
+Of course, you could use other functions to filter/subset the dataframe you get to land on the bits you're interested in. But alternatively, you could use your results to run the projects back through `get_resources()`, but not apply a project-specific search-term.
+
+In some instances you may have no option but to take this approach. Specifically, if you want to see the outcomes of a set of projects. You can't directly look at 'outcomes from UoE projects', you have to find the projects first, then get their outcomes in a separate step.
+
+```{r example-4, eval = T}
+
+#get the project ids you're interested in
+project_ids <- data$id
+
+#now run them back through `query_combination_all()`
+#we're using `purrr::safely()` as some projects may not have publications, in which case the url we're trying doesn't exist
+#this way we will 'catch' the error rather than see the function fail
+publications <- purrr::map(
+  .x = project_ids,
+  .f = purrr::safely(function(x) get_resources(resource = "project", output = "publication", resource_id = x))
+  ) |>
+  purrr::map_df("result")
+
+```
+
+
