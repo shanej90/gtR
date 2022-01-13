@@ -188,7 +188,7 @@ get_resources <- function(
     #turn your results into a df-------------------------------
 
     #get json result
-    loop_result_text <- httr::content(prelim_result, "text")
+    loop_result_text <- httr::content(result, "text")
 
     #convert to dataframe
     if(output_hack == "blah") {
