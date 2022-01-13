@@ -122,7 +122,7 @@ get_resources <- function(
   #extract total page numbers
   if(missing(page_nums)) { #if you want to return all pages
 
-    page_numbers <- (1:return_list$totalPages)
+    page_numbers <- c(1:return_list$totalPages)
 
   } else {
 
