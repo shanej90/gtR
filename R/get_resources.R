@@ -139,8 +139,8 @@ get_resources <- function(
     .search_fields = search_fields
     ) {
 
-    #sleep for 5 seconds to avoid potential throttling
-    Sys.sleep(5)
+    #sleep for 1.5 seconds to avoid potential throttling
+    Sys.sleep(1.5)
 
     #set up search fields to run for each page
     if(missing(.search_fields) & missing(.search_term)) {
