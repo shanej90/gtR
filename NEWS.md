@@ -1,3 +1,9 @@
+# gtR 0.3.1
+
+* Reduced sleep time between API calls from 5 to 1.5 seconds.
+* Extended list of possible combinations.
+* Corrected typo in collaboration endpoint.
+
 # gtR 0.3.0
 
 * Function that encompasses and replaces all previous query functions (`get_resources()`).

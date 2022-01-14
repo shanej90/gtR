@@ -14,7 +14,7 @@ gtr_endpoints <- list(
   "keyFinding" = "/keyfindings",
   "impactSummary" = "/impactsummaries",
   "publication" = "/publications",
-  "collaborations" = "/collaborations",
+  "collaboration" = "/collaborations",
   "intellectualProperty" = "/intellectualproperties",
   "policyInfluence" = "/policyinfluences",
   "product" = "/products",
