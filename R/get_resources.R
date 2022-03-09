@@ -60,6 +60,10 @@ get_resources <- function(
 
     .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}")
 
+  } else if(missing(output) & !missing(resource_id)) {
+
+    .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[[resource]]}/{resource_id}")
+
   } else {
 
     .url <- glue::glue("{gtR::gtr_endpoints[['base']]}{gtR::gtr_endpoints[['outcomes']]}{gtR::gtr_endpoints[[resource]]}")

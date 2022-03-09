@@ -1,11 +1,11 @@
 pandoc: 2.14.0.3
-pkgdown: 2.0.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   gtR_combinations: gtR_combinations.html
   querying_resources: querying_resources.html
   gtR: gtR.html
-last_built: 2022-01-14T14:44Z
+last_built: 2022-03-09T16:22Z
 urls:
   reference: https://shanej90.github.io/gtR/reference
   article: https://shanej90.github.io/gtR/articles

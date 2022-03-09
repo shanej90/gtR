@@ -1,3 +1,9 @@
+# gtR 0.4.0
+
+* Cleaned up `gtr_combinations` list.
+* Tidied up `get_resources()` so one can return a single object within the chosen resource using its ID (eg, return a single organisation, a single project, etc).
+* Added `get_links()` to return details of entities linked to the one(s) returned. This can be used 'downstream' to pick up other details.
+
 # gtR 0.3.1
 
 * Reduced sleep time between API calls from 5 to 1.5 seconds.

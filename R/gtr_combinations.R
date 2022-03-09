@@ -5,16 +5,12 @@
 
 gtr_combinations <- list(
   "organisation project",
-  "organisation publication",
   "organisation fund",
   "organisation person",
   "person organisation",
-  "person publication",
   "person project",
-  "person fund",
   "project fund",
   "project person",
-  "project outcomes",
   "project publication",
   "project collaboration",
   "project impactSummary",

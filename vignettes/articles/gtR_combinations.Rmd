@@ -2,7 +2,7 @@
 title: "Results related to a specific entity"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{gtR_combination}
+  %\VignetteIndexEntry{Results related to a specific entity}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

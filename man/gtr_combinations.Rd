@@ -5,7 +5,7 @@
 \alias{gtr_combinations}
 \title{List of endpoints combinations for query_resource_linked_res function.}
 \format{
-An object of class \code{list} of length 20.
+An object of class \code{list} of length 16.
 }
 \usage{
 gtr_combinations
