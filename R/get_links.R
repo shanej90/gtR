@@ -11,9 +11,6 @@ get_links <- function(
   resource_id
 ) {
 
-  resource <- "organisation"
-  resource_id <- "961756BF-E31F-4A13-836F-0A09BA02385C"
-
   #error handling---------------------------------------
 
   #check resource is correct
